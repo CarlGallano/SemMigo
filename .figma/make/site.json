@@ -1,0 +1,13 @@
+{
+  "description": "Enhance student productivity with a sleek dashboard that tracks tasks, grades, schedules, and analytics, all designed for a modern learning experience.",
+  "icons": {
+    "icon": "icon.png"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

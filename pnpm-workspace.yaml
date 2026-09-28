@@ -1,0 +1,2 @@
+# No dependencies currently need post-install build scripts.
+allowBuilds: {}
