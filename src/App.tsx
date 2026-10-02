@@ -29,11 +29,13 @@ import { AnalyticsView } from "@/views/AnalyticsView"
 import { NotesView } from "@/views/NotesView"
 import { ProfileView } from "@/views/ProfileView"
 import type { Note, Subject, Task, User, View } from "@/types"
+import { usePersistedState } from "@/hooks"
 import { nextId } from "@/utils"
 
-/** Dark by default. Toggling `light` on <html> flips every CSS variable. */
+/** Dark by default, and the choice survives a refresh. Toggling `light` on
+ *  <html> flips every CSS variable. */
 function useTheme() {
-  const [dark, setDark] = useState(true)
+  const [dark, setDark] = usePersistedState("dark", true)
   useEffect(() => {
     document.documentElement.classList.toggle("light", !dark)
   }, [dark])
@@ -111,14 +113,16 @@ function AppView({
 
 export default function App() {
   const { dark, toggle: toggleTheme } = useTheme()
-  const [user, setUser] = useState<User | null>(null)
+  // Everything below persists to localStorage, so a student's tasks, subjects,
+  // notes, theme and session all survive a refresh (or an accidental close).
+  const [user, setUser] = usePersistedState<User | null>("user", null)
   const [screen, setScreen] = useState<"landing" | "auth">("landing")
   const [view, setView] = useState<View>("dashboard")
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [tasks, setTasks] = useState<Task[]>(initTasks)
-  const [subjects, setSubjects] = useState<Subject[]>(initSubjects)
-  const [notes, setNotes] = useState<Note[]>(initNotes)
+  const [tasks, setTasks] = usePersistedState<Task[]>("tasks", initTasks)
+  const [subjects, setSubjects] = usePersistedState<Subject[]>("subjects", initSubjects)
+  const [notes, setNotes] = usePersistedState<Note[]>("notes", initNotes)
   const [taskModalOpen, setTaskModalOpen] = useState(false)
 
   const addTask = (data: Omit<Task, "id">) =>
